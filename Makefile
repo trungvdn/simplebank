@@ -16,4 +16,6 @@ test:
 	go test -v -cover  ./...
 psql:
 	docker exec -it postgres14 psql -U root -d simple_bank
-.PHONY: postgres createdb dropdb createsql migrateup migratedown sqlc psql
+server: 
+	go run main.go
+.PHONY: postgres createdb dropdb createsql migrateup migratedown sqlc psql server
