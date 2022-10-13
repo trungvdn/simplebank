@@ -8,8 +8,12 @@ createsql:
 	migrate create -ext sql -dir db/migration -seq init_schema
 migrateup:
 	migrate -path db/migration -database "postgresql://root:mysecret@localhost:5432/simple_bank?sslmode=disable" -verbose up
+migrateup1:
+	migrate -path db/migration -database "postgresql://root:mysecret@localhost:5432/simple_bank?sslmode=disable" -verbose up 1
 migratedown:
 	migrate -path db/migration -database "postgresql://root:mysecret@localhost:5432/simple_bank?sslmode=disable" -verbose down
+migratedown1:
+	migrate -path db/migration -database "postgresql://root:mysecret@localhost:5432/simple_bank?sslmode=disable" -verbose down 1
 sqlc:
 	sqlc generate  
 test:
@@ -18,4 +22,6 @@ psql:
 	docker exec -it postgres14 psql -U root -d simple_bank
 server: 
 	go run main.go
-.PHONY: postgres createdb dropdb createsql migrateup migratedown sqlc psql server
+mockdb:
+	mockgen -package mockdb -destination db/mock/store.go github.com/trungvdn/simplebank/db/sqlc Store
+.PHONY: postgres createdb dropdb createsql migrateup migratedown migrateup1 migratedown1 sqlc psql server mockdb
